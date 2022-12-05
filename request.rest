@@ -1,0 +1,159 @@
+//Portfolio
+GET http://localhost:5000/portfolio
+
+###
+GET http://localhost:5000/portfolio/1
+
+###
+POST http://localhost:5000/portfolio
+Content-Type: application/json
+
+{
+    "title":"testing2",
+    "github":"github",
+    "demo":"demo",
+    "img":"demo"
+}
+
+###
+PATCH http://localhost:5000/portfolio/1
+Content-Type: application/json
+
+{
+    "title":"masako",
+    "github":"morningstar",
+    "demo":"demos",
+    "img":"img"
+}
+
+###
+DELETE http://localhost:5000/portfolio/4,3
+
+//Gallery
+
+###
+GET http://localhost:5000/gallery
+
+###
+GET http://localhost:5000/gallery/1
+
+###
+POST http://localhost:5000/gallery
+Content-Type: application/json
+
+{
+    "title":"testing2",
+    "description":"github",
+    "img":"demo"
+}
+
+###
+PATCH http://localhost:5000/gallery/1
+Content-Type: application/json
+
+{
+    "title":"testing2",
+    "description":"github",
+    "img":"demo"
+}
+
+###
+DELETE http://localhost:5000/gallery/4,3
+
+//Experiences
+
+###
+GET http://localhost:5000/experiences
+
+###
+GET http://localhost:5000/experiences/column
+
+###
+GET http://localhost:5000/experiences/1
+
+###
+POST http://localhost:5000/experiences
+Content-Type: application/json
+
+{
+    "language":"testing2",
+    "level":"github",
+    "status":"demo"
+}
+
+###
+PATCH http://localhost:5000/experiences/1
+Content-Type: application/json
+
+{
+    "language":"testing1",
+    "level":"github",
+    "status":"demo"
+}
+
+###
+DELETE http://localhost:5000/experiences/4,3
+
+//Experienced
+
+###
+GET http://localhost:5000/experienced/column
+
+###
+GET http://localhost:5000/experienced
+
+###
+GET http://localhost:5000/experienced/1
+
+###
+POST http://localhost:5000/experienced
+Content-Type: application/json
+
+{
+    "year":"3"
+}
+
+###
+PATCH http://localhost:5000/experienced/1
+Content-Type: application/json
+
+{
+    "year":"3"
+}
+
+###
+DELETE http://localhost:5000/experienced/1,2
+
+
+###
+GET http://localhost:5000/getUser
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiQWRtaW4iLCJpYXQiOjE2NjE3MDYxMDMsImV4cCI6MTY2MTcwNjEyM30.qyrKzlBrdlWlppEoooI0Hbt_vM24-ZH4hcQTxQdrS78
+
+
+###
+POST http://localhost:5000/register
+Content-Type: application/json
+
+{
+    "username":"Admin",
+    "password":"12345",
+    "confirmPassword":"12345"
+}
+
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "username":"Admin",
+    "password":"12345"
+}
+
+###
+GET http://localhost:5000/token
+
+###
+DELETE http://localhost:5000/logout
+
+###
+GET http://localhost:5000/tables
