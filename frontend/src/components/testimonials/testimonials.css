@@ -33,27 +33,14 @@
 .swiper-pagination-clickable .swiper-pagination-bullet{
     background:var(--color-primary) ;
 }
-@media screen and (max-width:1024px){
-    .container.testimonials__container{
-        width: 60%;
-    }
-}
-@media screen and (max-width:600px){
-    .container.testimonials__container{
-        width:var(--container-width-sm);
-    }
-    .client__review{
-        width: var(--container-width-sm);
-    }
-}
-#app { height: 100% }
+/* #app { height: 100% }
 
 
 #app {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .swiper {
   width: 240px;
@@ -69,5 +56,18 @@
   font-weight: bold;
   color: #fff;
   background-color: var(--color-bg-variant);
+}
+@media screen and (max-width:1024px){
+    .container.testimonials__container{
+        width: 60%;
+    }
+}
+@media screen and (max-width:600px){
+    .container.testimonials__container{
+        width:var(--container-width-sm);
+    }
+    .client__review{
+        width: var(--container-width-sm);
+    }
 }
 

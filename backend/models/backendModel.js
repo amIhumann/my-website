@@ -55,16 +55,14 @@ const Users = db.define('user', {
     refreshToken: {
         type: DataTypes.TEXT
     }
-}, {
-    freezeTableName: true,
 })
 const Cv = db.define('cv', {
     name: {
         type: DataTypes.STRING
     },
-    cv: {
+    imgCv: {
         type: DataTypes.STRING
-    },
+    }
 })
 
 const getTables = db.query('show tables');

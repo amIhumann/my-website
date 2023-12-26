@@ -25,7 +25,7 @@ const getColumn = async (req, res) => {
 }
 const getAll = async (req, res) => {
     try {
-        const item = await Experiences.findAll({ attributes: ['id', 'language', 'level', 'status'] })
+        const item = await Experiences.findAll()
         res.json(item)
     } catch (error) {
         res.json({ message: error.message })
@@ -36,7 +36,7 @@ const getById = async (req, res) => {
         const item = await Experiences.findAll({
             where: {
                 id: req.params.id
-            }, attributes: ['id', 'language', 'level', 'status']
+            }
         })
         res.json(item)
     } catch (error) {
@@ -67,13 +67,13 @@ const update = async (req, res) => {
         res.json({ message: error.message })
     }
 }
+
 const deleted = async (req, res) => {
-    const data = req.params.id.split(',')
-    const result = data.map(Number)
     try {
+        let id = Buffer.from(req.params.id, 'base64').toString('ascii').split(',');
         await Experiences.destroy({
             where: {
-                id: result
+                id: id
             }
         })
         res.json({
@@ -83,4 +83,5 @@ const deleted = async (req, res) => {
         res.json({ message: error.message })
     }
 }
+
 export { getAll, create, getById, update, deleted, getColumn }

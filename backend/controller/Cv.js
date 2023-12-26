@@ -1,17 +1,23 @@
 import { Cv } from '../models/backendModel.js'
+import Buffer from 'buffer'
 
-const getColumn = async (req,res) => {
+const getColumn = async (req, res) => {
     try {
-        const data=[]
-        for( let key in Cv.rawAttributes ){
-            if(key.includes('At') || key=='cv')break;
-            data.push({
-                field:key,
-                headerName:key[0].toUpperCase() + key.substring(1),
+        const result = []
+        const data = Cv.rawAttributes
+        const width = 800 / Object.keys(data).length
+        for (let key in Cv.rawAttributes) {
+            if (key.includes('At')) break;
+            result.push({
+                field: key,
+                headerName: key[0].toUpperCase() + key.substring(1),
+                width: width,
+                type: {
+                    name: data[key].type.key,
+                    value: data[key]['values']
+                }
             });
         }
-        const width=800/data.length
-        const result=data.map(v => ({...v, width: width}))
         res.json(result)
     } catch (error) {
         res.json({ message: error.message })
@@ -19,7 +25,7 @@ const getColumn = async (req,res) => {
 }
 const getAll = async (req, res) => {
     try {
-        const item = await Cv.findAll({ attributes: ['id', 'name'] })
+        const item = await Cv.findAll()
         res.json(item)
     } catch (error) {
         res.json({ message: error.message })
@@ -30,7 +36,7 @@ const getById = async (req, res) => {
         const item = await Cv.findAll({
             where: {
                 id: req.params.id
-            }, attributes: ['id', 'title', 'description','img','createdAt', 'updatedAt']
+            }
         })
         res.json(item)
     } catch (error) {
@@ -62,12 +68,11 @@ const update = async (req, res) => {
     }
 }
 const deleted = async (req, res) => {
-    const data = req.params.id.split(',')
-    const result = data.map(Number)
+    let id = Buffer.from(req.params.id, 'base64').toString('ascii').split(',');
     try {
         await Cv.destroy({
             where: {
-                id: result
+                id: id
             }
         })
         res.json({

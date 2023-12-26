@@ -92,7 +92,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:5000/experiences/4,3
+DELETE http://localhost:5000/experiences/Mw
 
 //Experienced
 

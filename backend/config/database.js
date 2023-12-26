@@ -5,7 +5,7 @@ const db = new Sequelize('backend', 'root', '', {
     dialect: 'mysql',
     define: {
         timestamps: false,
-        freezeTableName: false
+        freezeTableName: true
     }
 })
 

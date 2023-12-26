@@ -1,41 +1,67 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Add from "./components/admin/add";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import {
+  CardActions,
+  Card,
+  CardContent,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  Button,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import { getTableRowUtilityClass } from "@mui/material";
 import Swal from "sweetalert2";
 
 const Admin = () => {
   const [id, setId] = useState();
   const [table, setTable] = useState("experiences");
+  const [column, setColumn] = useState([]);
+  const [row, setRow] = useState([]);
   const redirect = useNavigate();
   const tableSelect = (e) => {
     setTable(e.target.value);
   };
-  const deleteRow = () => {
-    console.log(id);
+  const deleteRow = async () => {
+    try {
+      await axios
+        .delete(
+          `http://localhost:5000/${table}/${Buffer.from(`${id}`)
+            .toString("base64")
+            .replace(/=/g, "")}`
+        )
+        .then((response) =>
+          Swal.fire(
+            response.status === 200 ? "Success" : "Alert",
+            response.data.message,
+            response.status === 200 ? "success" : "warning"
+          )
+        )
+        .catch((error) =>
+          Swal.fire(
+            error.response.statusText,
+            error.response.data.message,
+            "error"
+          )
+        );
+      getRow(table);
+    } catch (error) {
+      Swal.fire("Error", error.message, "error");
+    }
   };
-  const addRow = (e) => {
-    e.preventDefault();
-    redirect(`/add/${table}`);
-  };
-  const [column, setColumn] = useState([]);
-  const [row, setRow] = useState([]);
   const getColumn = async (table) => {
     try {
       const response = await axios.get(`http://localhost:5000/${table}/column`);
-      const data = response.data;
+      const data = response.data
+        .filter((data) => !data.field.includes("img"))
+        .map((val, i, arr) => {
+          val.width = 800 / arr.length;
+          delete val.type;
+          return val;
+        });
       data.push({
         field: "action",
         headerName: "Action",
@@ -45,13 +71,15 @@ const Admin = () => {
             <Button
               variant="outlined"
               color="success"
-              onClick={() => console.log(params.row.id)}
+              onClick={() => redirect(`/edit/${table}/${params.row.id}`)}
             >
               Edit
             </Button>
           );
         },
       });
+      data[0].renderCell = (params) =>
+        params.api.getRowIndex(params.row.id) + 1;
       setColumn(data);
     } catch (error) {
       Swal.fire("Error", error.message, "error");
@@ -100,10 +128,10 @@ const Admin = () => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={addRow}
+            onClick={() => redirect(`/add/${table}`)}
             style={{ marginLeft: "auto", marginRight: "10px" }}
           >
-            add
+            ADD
           </Button>
         </CardActions>
         <CardContent>

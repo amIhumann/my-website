@@ -18,7 +18,7 @@ nav a{
     padding: 0.9rem;
     border-radius: 50%;
     display: flex;
-    color: var(--color-light);
+    color: var(--color-primary);
     font: 1.1rem;
 }
 nav a:hover{
@@ -30,7 +30,7 @@ nav a:active{
 }
 .active{
     background: var(--color-primary);
-    color: var(--color-white);
+    color: #fff;
 }
 @media screen and (max-width:768px) {
     

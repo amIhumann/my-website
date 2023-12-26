@@ -1,0 +1,4 @@
+- Loading Page
+- Hilangkan tulisan "US"
+- Contact pada footer diganti
+- Pemilihan warna pada light theme kurang tepat

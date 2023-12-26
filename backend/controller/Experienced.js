@@ -1,15 +1,20 @@
 import { Experienced } from '../models/backendModel.js'
 
-const getColumn = async (req,res) => {
+const getColumn = async (req, res) => {
     try {
-        const result=[]
-        const width=800/Object.keys(Experienced.rawAttributes).length
-        for( let key in Experienced.rawAttributes ){
-            if(key.includes('At'))break;
+        const result = []
+        const data = Experienced.rawAttributes
+        const width = 800 / Object.keys(data).length
+        for (let key in Experienced.rawAttributes) {
+            if (key.includes('At')) break;
             result.push({
-                field:key,
-                headerName:key[0].toUpperCase() + key.substring(1),
-                width:width
+                field: key,
+                headerName: key[0].toUpperCase() + key.substring(1),
+                width: width,
+                type: {
+                    name: data[key].type.key,
+                    value: data[key]['values']
+                }
             });
         }
         res.json(result)
@@ -19,7 +24,7 @@ const getColumn = async (req,res) => {
 }
 const getAll = async (req, res) => {
     try {
-        const item = await Experienced.findAll({ attributes: ['id','year' ] })
+        const item = await Experienced.findAll({ attributes: ['id', 'year'] })
         res.json(item)
     } catch (error) {
         res.json({ message: error.message })
@@ -30,7 +35,7 @@ const getById = async (req, res) => {
         const item = await Experienced.findAll({
             where: {
                 id: req.params.id
-            }, attributes: ['id','year' ]
+            }, attributes: ['id', 'year']
         })
         res.json(item)
     } catch (error) {
@@ -39,7 +44,7 @@ const getById = async (req, res) => {
 }
 const create = async (req, res) => {
     try {
-        await Experiences.create(req.body)
+        await Experienced.create(req.body)
         res.json({
             'message': "Experiences Created"
         })
@@ -63,12 +68,11 @@ const update = async (req, res) => {
     }
 }
 const deleted = async (req, res) => {
-    const data = req.params.id.split(',')
-    const result = data.map(Number)
+    let id = Buffer.from(req.params.id, 'base64').toString('ascii');
     try {
         await Experienced.destroy({
             where: {
-                id: result
+                id: id
             }
         })
         res.json({
@@ -78,4 +82,4 @@ const deleted = async (req, res) => {
         res.json({ message: error.message })
     }
 }
-export { getAll, create, getById, update, deleted, getColumn}
+export { getAll, create, getById, update, deleted, getColumn }
