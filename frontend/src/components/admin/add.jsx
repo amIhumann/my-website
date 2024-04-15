@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
-import axios from "axios";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import Swal from "sweetalert2";
 import {
   CardActions,
@@ -15,8 +14,12 @@ import {
   Grid,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import { GlobalState } from '../../index';
+import { AdminState } from "../../Admin";
 
 const Add = () => {
+  const axios = useContext(AdminState).axiosJWT;
+  const url = useContext(GlobalState).url;
   const hiddenFile = useRef(null);
   const [fileImage, setFileImage] = useState(
     require("../../assets/upload.png")
@@ -30,10 +33,11 @@ const Add = () => {
     e.preventDefault();
     redirect("/admin");
   };
+
   const getField = async (table) => {
     try {
       await axios
-        .get(`http://localhost:5000/${table}/column`)
+        .get(`${table}/column`)
         .then((response) => {
           const filter = response.data;
           filter.shift();
@@ -50,13 +54,13 @@ const Add = () => {
       const getId = async () => {
         try {
           await axios
-            .get(`http://localhost:5000/${table}/${id}`)
+            .get(`${table}/${id}`)
             .then((response) => {
               const data = response.data[0];
               const displayImg = Object.keys(data);
               displayImg.find((val) => {
                 if (val.includes("img"))
-                  setFileImage(`http://localhost:5000/images/${data[val]}`);
+                  setFileImage(`${url}images/${data[val]}`);
               });
               setValue(data);
             });
@@ -106,7 +110,7 @@ const Add = () => {
       let formData = new FormData(form.current);
       if (id && type === "edit") {
         await axios
-          .patch(`http://localhost:5000/${table}/${id}`, formData, config)
+          .patch(`${table}/${id}`, formData, config)
           .then((res) =>
             Swal.fire(
               res.statusText,
@@ -123,7 +127,7 @@ const Add = () => {
           );
       } else if (type === "add") {
         await axios
-          .post(`http://localhost:5000/${table}`, formData, config)
+          .post(`${table}`, formData, config)
           .then((res) =>
             Swal.fire(
               res.statusText,
@@ -139,6 +143,7 @@ const Add = () => {
             )
           );
       }
+      redirect("/admin");
     } catch (error) {
       Swal.fire("Error", error.message, "error");
       return false;

@@ -1,12 +1,14 @@
-import React from "react";
-import AVTR1 from "../../assets/hanipan1.jpg";
+import React, { useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import { EffectCards, Autoplay } from "swiper";
 import "./testimonials.css";
+import { GlobalState } from '../../index';
 
-const Testimonials = () => {
+const Testimonials = ({gallery}) => {
+  const url = useContext(GlobalState).url;
+
   return (
     <section id="testimonials" className="section">
       <h5>Review</h5>
@@ -21,17 +23,11 @@ const Testimonials = () => {
         }}
         className="container testimonials__container"
       >
-        <SwiperSlide>
-          <img id="image" src={AVTR1} alt="Avatar One" />
-        </SwiperSlide>
-        <SwiperSlide>Slide 2</SwiperSlide>
-        <SwiperSlide>Slide 3</SwiperSlide>
-        <SwiperSlide>Slide 4</SwiperSlide>
-        <SwiperSlide>Slide 5</SwiperSlide>
-        <SwiperSlide>Slide 6</SwiperSlide>
-        <SwiperSlide>Slide 7</SwiperSlide>
-        <SwiperSlide>Slide 8</SwiperSlide>
-        <SwiperSlide>Slide 9</SwiperSlide>
+        {gallery && gallery.map((value, key) => (
+          <SwiperSlide key={key}>
+            <img id="image" src={`${url}images/${value.img}`} alt={value.title} />
+          </SwiperSlide>
+      ))}
       </Swiper>
     </section>
   );

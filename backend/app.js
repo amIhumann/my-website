@@ -5,7 +5,9 @@ import Portfolio from './routes/Portfolio.js'
 import Gallery from './routes/Gallery.js'
 import Experiences from './routes/Experiences.js'
 import Experienced from './routes/Experienced.js'
+import Services from './routes/Services.js'
 import Tables from './routes/Tables.js'
+import Frontend from './routes/Frontend.js'
 import authRoutes from './routes/auth.js'
 import Cv from './routes/cv.js'
 import cors from 'cors'
@@ -23,17 +25,23 @@ try {
     console.error('Connection Error:', error)
 }
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
+app.use(cors({ 
+    credentials: true, 
+    origin: 'http://localhost:3000' ,
+    methods: ['POST', 'PATCH', 'GET', 'DELETE'],
+}))
 app.use(cookieParser())
 app.use(express.json())
 app.use(FileUpload());
 app.use(express.static("public"));
+app.use('/display', Frontend)
 app.use('/', authRoutes)
-// app.use(verifyToken)
+app.use(verifyToken)
 app.use('/portfolio', Portfolio)
 app.use('/gallery', Gallery)
 app.use('/experiences', Experiences)
 app.use('/experienced', Experienced)
+app.use('/services', Services)
 app.use('/tables', Tables)
 app.use('/cv', Cv)
 

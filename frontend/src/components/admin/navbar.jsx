@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
+import { useNavigate } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,13 +14,16 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { deepOrange } from '@mui/material/colors';
+import { GlobalState } from "../../index";
+import Swal from "sweetalert2";
 
 const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const Navbar = () => {
+const Navbar = ({username}) => {
+  const axios = useContext(GlobalState).axiosRequest;
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const redirect = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -36,8 +40,29 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
 
+  const Logout = () => {
+    try {
+        Swal.fire({
+          title: "Logout",
+          text: "Apakah Anda yakin untuk keluar ?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.delete('logout');
+            redirect("/login");
+          }
+        });
+    } catch (error) {
+        Swal.fire("Error", error.message, "error");
+    }
+  }
+
   return (
-      <AppBar position="static" style={{height:'10vh'}}>
+      <AppBar position="static" style={{height:'10vh', paddingTop: '1.5rem'}}>
         <Container maxWidth="xl" sx={{mt:'-3.9vh'}}>
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -129,7 +154,7 @@ const Navbar = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Hanifan Hidayatullah" src="/static/images/avatar/2.jpg" sx={{ bgcolor: deepOrange[500] }} />
+                  <Avatar alt={username} src="/static/images/avatar/2.jpg" sx={{ bgcolor: deepOrange[500] }} />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -148,11 +173,9 @@ const Navbar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center" onClick={Logout}>Logout</Typography>
+                </MenuItem>
               </Menu>
             </Box>
           </Toolbar>

@@ -15,7 +15,10 @@ const Portfolio = db.define('portfolio', {
     },
     img: {
         type: DataTypes.STRING
-    }
+    },
+    status: {
+        type: DataTypes.ENUM('Website','Mobile Apps','Game','CLI','CV','BOT','AI')
+    },
 })
 const Gallery = db.define('gallery', {
     title: {
@@ -33,15 +36,45 @@ const Experiences = db.define('experiences', {
         type: DataTypes.STRING
     },
     level: {
-        type: DataTypes.ENUM('basic', 'intermediate', 'experienced', 'expert')
+        type: DataTypes.ENUM('Basic','Intermediate','Experienced','Advanced')
     },
     status: {
-        type: DataTypes.ENUM('frontend', 'backend', 'devops', 'data engineer')
-    }
+        type: DataTypes.ENUM('Frontend','Backend','Databases','Game Development','Language')
+    },
+    icon: {
+        type: DataTypes.STRING
+    },
 })
 const Experienced = db.define('experienced', {
     year: {
         type: DataTypes.INTEGER
+    },
+    education: {
+        type: DataTypes.STRING
+    },
+    phone: {
+        type: DataTypes.STRING
+    },
+    facebook: {
+        type: DataTypes.STRING
+    },
+    instagram: {
+        type: DataTypes.STRING
+    },
+    linkedin: {
+        type: DataTypes.STRING
+    },
+    email: {
+        type: DataTypes.STRING
+    },
+    messenger: {
+        type: DataTypes.STRING
+    },
+    github: {
+        type: DataTypes.STRING
+    },
+    twitter: {
+        type: DataTypes.STRING
     }
 })
 
@@ -65,6 +98,13 @@ const Cv = db.define('cv', {
     }
 })
 
-const getTables = db.query('show tables');
+const Services = db.define('services', {
+    desc: {
+        type: DataTypes.TEXT
+    },
+    type: {
+        type: DataTypes.ENUM('Digital Marketing','Software Development','Data Analyst')
+    }
+})
 
-export { Portfolio, Gallery, Experienced, Experiences, Users, getTables, Cv }
+export { Portfolio, Gallery, Experienced, Experiences, Users, Cv, Services }

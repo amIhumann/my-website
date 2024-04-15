@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useLayoutEffect, useContext } from "react";
 import "./index.css";
 import Header from "./components/header/Header";
 import Nav from "./components/nav/Nav";
@@ -11,8 +11,12 @@ import Contact from "./components/contact/Contact";
 import Footer from "./components/footer/Footer";
 import AOS from "aos";
 import Swal from "sweetalert2";
+import { GlobalState } from "./index";
 
 function App() {
+  const [data, setData] = useState({});
+  const axios = useContext(GlobalState).axiosRequest;
+
   document.addEventListener("scroll", () => {
     const section = document.querySelectorAll(".section");
     const arr = [];
@@ -36,24 +40,39 @@ function App() {
       Swal.fire("internet", "Connection error!", "error");
     };
   };
-  useEffect(() => {
+
+  const getData = async (table) => {
+    try {
+      await axios
+      .get(`display`)
+      .then((response) => {
+        setData(response?.data)
+      });
+    } catch (error) {
+      Swal.fire("Error", error.message, "error");
+    }
+  };
+
+  useLayoutEffect(() => {
+    getData();
     AOS.init({
       duration: "1500",
     });
     AOS.refresh();
     poopityScoop();
   }, []);
+
   return (
     <>
-      <Header />
+      <Header cv={data?.cv} sosmed={data?.about}/>
       <Nav />
-      <About />
-      <Experience />
-      <Services />
-      <Portofolio />
-      <Testimonials />
-      <Contact />
-      <Footer />
+      <About about={data?.about} project={data?.portfolio}/>
+      <Experience experiences={data?.experiences}/>
+      <Services services={data?.services}/>
+      <Portofolio portfolio={data?.portfolio}/>
+      <Testimonials gallery={data?.gallery}/>
+      <Contact sosmed={data?.about} />
+      <Footer sosmed={data?.about} />
     </>
   );
 }

@@ -37,10 +37,13 @@
     margin-bottom: 0.8rem;
 }
 .service__list-icon {
+    min-width: 20px;
     color: var(--color-primary);
     margin-top: 2px;
 }
 .service__list p{
+    max-width: 225px;
+    text-align: left;
     font-size: 0.9rem;
 }
 @media screen and (max-width: 1024px) {

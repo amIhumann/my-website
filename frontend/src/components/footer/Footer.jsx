@@ -1,11 +1,11 @@
 import React from "react";
-import "./newFooter.css";
+import "./footer.css";
 import { FaFacebookF } from "react-icons/fa";
 import { FiInstagram } from "react-icons/fi";
 import { IoLogoTwitter } from "react-icons/io";
 import { BsLinkedin } from "react-icons/bs";
 
-const Footer = () => {
+const Footer = ({sosmed}) => {
   return (
     <footer className="footer-20192">
       <div className="site-section">
@@ -13,50 +13,51 @@ const Footer = () => {
 
           <div className="cta d-block d-md-flex align-items-center px-5">
             <div>
-              <h2 className="mb-0">Ready for a next project?</h2>
+              <h2 className="mb-0">Ready to turn your software idea into a project ?</h2>
               <h3>Let's get started!</h3>
             </div>
             <div className="ml-auto">
-              <a href="#a" className="btn contact-us rounded-2 py-3 px-5">Contact</a>
+              <a href={sosmed?.phone} className="btn contact-us rounded-2 py-3">Contact me</a>
             </div>
           </div>
           <div className="row">
 
             <div className="col-sm">
-              <a href="#a" className="footer-logo">Hanif-H</a>
+              <a href="/" className="footer-logo">Hanif-H</a>
               <p className="copyright">
                 <small>&copy; All rights reserved.</small>
               </p>
             </div>
             <div className="col-sm">
-              <h3>Customers</h3>
+              <h3>Services</h3>
               <ul className="list-unstyled links">
-                <li><a href="#a">Buyer</a></li>
-                <li><a href="#a">Supplier</a></li>
+                <li><a href="#services">Digital Marketing</a></li>
+                <li><a href="#services">Mobile/Web Development</a></li>
+                <li><a href="#services">Data Analyst</a></li>
               </ul>
             </div>
             <div className="col-sm">
-              <h3>Company</h3>
+              <h3>About</h3>
               <ul className="list-unstyled links">
-                <li><a href="#a">About us</a></li>
-                <li><a href="#a">Careers</a></li>
-                <li><a href="#a">Contact us</a></li>
+                <li><a href="#experiences">Skills</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
               </ul>
             </div>
             <div className="col-sm">
               <h3>Further Information</h3>
               <ul className="list-unstyled links">
-                <li><a href="#a">Terms &amp; Conditions</a></li>
-                <li><a href="#a">Privacy Policy</a></li>
+                <li><a href="/">Terms &amp; Conditions</a></li>
+                <li><a href="/">Privacy Policy</a></li>
               </ul>
             </div>
             <div className="col-md-3">
-              <h3>Follow us</h3>
+              <h3>Follow</h3>
               <ul className="list-unstyled social">
-                <li><a href="#a"><FaFacebookF /></a></li>
-                <li><a href="#a"><FiInstagram /></a></li>
-                <li><a href="#a"><IoLogoTwitter /></a></li>
-                <li><a href="#a"><BsLinkedin /></a></li>
+                <li><a href={sosmed?.facebook}><FaFacebookF /></a></li>
+                <li><a href={sosmed?.instagram}><FiInstagram /></a></li>
+                <li><a href={sosmed?.twitter}><IoLogoTwitter /></a></li>
+                <li><a href={sosmed?.linkedin}><BsLinkedin /></a></li>
               </ul>
             </div>
             

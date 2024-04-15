@@ -1,4 +1,7 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { 
+  useState, 
+  // useLayoutEffect 
+} from "react";
 import "./header.css";
 import CTA from "./CTA";
 import ME from "../../assets/hanipan.png";
@@ -9,7 +12,7 @@ import HeaderSocials from "./HeaderSocials";
 import "aos/dist/aos.css";
 import { BsChevronDoubleDown, BsChevronDoubleUp } from "react-icons/bs";
 
-const Header = () => {
+const Header = (props) => {
   let root = document.querySelector(':root');
   let rootProperty = getComputedStyle(root);
   let body = document.querySelector('body');
@@ -18,21 +21,21 @@ const Header = () => {
   const [nameClass, setNameClass] = useState("");
   const [iconToggle, setIconToggle] = useState(<BsChevronDoubleDown />);
   const [theme, setTheme] = useState({
-    colorBg : '#1f1f38',
-    colorBgVariant : '#2c2c6c',
-    colorPrimary : '#6DAFFE',
-    colorPrimaryVariant : 'rgba(77,181,255,0.4)',
-    colorWhite : '#fff',
-    colorLight : 'rgba(255,255,255,0.6)',
-    backgroundImage : `url('${img}')`,
+    colorBg : '#e0f5e2',
+    colorBgVariant : '#7bffb2',
+    colorPrimary : '#2c6c49',
+    colorPrimaryVariant : 'rgba(77, 255, 92, 0.4)',
+    colorWhite : '#000',
+    colorLight : '#fff',
+    backgroundImage : `none`,
   });
 
-  useLayoutEffect(()=>{
-    const hours = new Date().getHours();
-    if(!(hours > 6 && hours < 20)){
-      document.getElementById('toggle__theme').click();
-    }
-  },[]);
+  // useLayoutEffect(()=>{
+    // const hours = new Date().getHours();
+    // if(!(hours > 6 && hours < 20)){
+      // document.getElementById('toggle__theme').click();
+    // }
+  // },[]);
 
   function toggleDropdown(e) {
     e.preventDefault();
@@ -64,7 +67,7 @@ const Header = () => {
       root.style.setProperty('--color-primary', theme.colorPrimary);
       root.style.setProperty('--color-primary-variant', theme.colorPrimaryVariant);
       root.style.setProperty('--color-white', theme.colorWhite);
-      root.style.setProperty('--color-light', theme.colorDark);
+      root.style.setProperty('--color-light', theme.colorLight);
       body.style.backgroundImage = theme.backgroundImage;
 
       return nextTheme;
@@ -75,7 +78,7 @@ const Header = () => {
     <>
       <div className={`drop-down ${nameClass}`}>
         <div className="dropdown__theme">
-          <input type="checkbox" id="toggle__theme" onChange={changeTheme} />
+          <input type="checkbox" id="toggle__theme" onChange={changeTheme} defaultChecked={true}/>
           <label htmlFor="toggle__theme">
             <img src={sun} className="sun" alt="sun" />
             <img src={moon} className="moon" alt="moon" />
@@ -87,9 +90,9 @@ const Header = () => {
         <div className="container header__container">
           <h5 data-aos="fade">Hello I'm</h5>
           <h1 data-aos="fade">Hanifan Hidayatullah</h1>
-          <h5 data-aos="fade">Fullstack Developer</h5>
-          <CTA />
-          <HeaderSocials />
+          <h5 data-aos="fade">Software Developer</h5>
+          <CTA cv={props?.cv}/>
+          <HeaderSocials sosmed={props?.sosmed}/>
 
           <div className="me">
             <div className="image-contain"></div>

@@ -157,3 +157,15 @@ DELETE http://localhost:5000/logout
 
 ###
 GET http://localhost:5000/tables
+
+###
+GET http://localhost:5000/display
+
+###
+POST http://localhost:5000/display/portfolio
+Content-Type: application/json
+
+{
+    "status":"Website",
+    "offset":3
+}

@@ -1,18 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import Swal from "sweetalert2";
 import "./portofolio.css";
-import IMG1 from "../../assets/portfolio1.jpg";
-import IMG2 from "../../assets/portfolio2.jpg";
-import IMG3 from "../../assets/portfolio3.jpg";
-import IMG4 from "../../assets/portfolio4.jpg";
-import IMG5 from "../../assets/portfolio5.png";
-import IMG6 from "../../assets/portfolio6.jpg";
 import { BsFillCaretDownFill } from "react-icons/bs";
-
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { GlobalState } from '../../index';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -42,12 +36,125 @@ function a11yProps(index) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-const Portofolio = () => {
+
+const Portofolio = ({portfolio}) => {
+  const axios = useContext(GlobalState).axiosRequest;
+  const url = useContext(GlobalState).url;
   const [value, setValue] = useState(0);
+  const [item, setItem] = useState({});
+
+  useEffect(()=>{
+    if(portfolio){
+      (async function(){
+        let temp = { ...portfolio };
+        
+        await Object.entries(temp).forEach((element, index) => {
+          temp[element[0]] = element[1].map((value, key) => {
+            return <article data-aos="zoom-in" className="portfolio__item" key={key}>
+            <div className="portfolio__item-image">
+              <img src={`${url}images/${value.img}`} alt="image3" />
+            </div>
+            <h3>{value.title}</h3>
+            <div className="portfolio__item-cta">
+              <a
+                href={value.github}
+                className="resize-content btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Github
+              </a>
+              <a
+                href={value.demo}
+                className="resize-content btn btn-primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Live Demo
+              </a>
+            </div>
+          </article>
+          })
+        });
+    
+        setItem(temp);
+      })();
+    }
+  }, [portfolio])
+
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const addItem = async (status) => {
+    await axios
+    .post(`display/portfolio`, { status : status, offset : item[status].length })
+    .then((res) => {
+      let output = res.data.map((value, key) =>(
+         <article data-aos="zoom-in" className="portfolio__item" key={key}>
+          <div className="portfolio__item-image">
+            <img src={`${url}images/${value.img}`} alt="image3" />
+          </div>
+          <h3>{value.title}</h3>
+          <div className="portfolio__item-cta">
+            <a
+              href={value.github}
+              className="resize-content btn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Github
+            </a>
+            <a
+              href={value.demo}
+              className="resize-content btn btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Live Demo
+            </a>
+          </div>
+        </article>
+      ));
+
+      let temp = { ...item };
+      temp[status] = [ ...temp[status], ...output];
+      setItem(temp);
+    })
+    .catch((error) =>
+      Swal.fire(
+        'Error',
+        error.message,
+        "error"
+      )
+    );
+    // setItem((old) => [...old, 
+    //   <article data-aos="zoom-in" className="portfolio__item" key={"ghj"}>
+    //     <div className="portfolio__item-image">
+    //       <img src={IMG3} alt="image3" />
+    //     </div>
+    //     <h3>This is a portfolio item title</h3>
+    //     <div className="portfolio__item-cta">
+    //       <a
+    //         href="https:github.com"
+    //         className="resize-content btn"
+    //         target="_blank"
+    //         rel="noopener noreferrer"
+    //       >
+    //         Github
+    //       </a>
+    //       <a
+    //         href="https:.com"
+    //         className="resize-content btn btn-primary"
+    //         target="_blank"
+    //         rel="noopener noreferrer"
+    //       >
+    //         Live Demo
+    //       </a>
+    //     </div>
+    //   </article>]);
+  }
 
   return (
     <section id="portfolio" className="section">
@@ -57,7 +164,7 @@ const Portofolio = () => {
         className="container"
       >
         <Box>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }} key={"7d"}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -70,246 +177,35 @@ const Portofolio = () => {
               }}
               id="iniTabs"
             >
+            {item && Object.entries(item).map((element, index)=> (
               <Tab
-                label="Item One"
-                {...a11yProps(0)}
+                label={element[0]}
+                {...a11yProps(index)}
                 sx={{ minWidth: "fit-content", flex: 1, color : 'var(--color-white)'}}
+                key={index}
               />
-              <Tab
-                label="Item Two"
-                {...a11yProps(1)}
-                sx={{ minWidth: "fit-content", flex: 1, color : 'var(--color-white)' }}
-              />
-              <Tab
-                label="Item Three"
-                {...a11yProps(2)}
-                sx={{ minWidth: "fit-content", flex: 1, color : 'var(--color-white)' }}
-              />
+            ))}
             </Tabs>
           </Box>
-          <TabPanel value={value} index={0}>
-          <div className="portfolio__container">
-            <article data-aos="zoom-in" className="portfolio__item">
-            <div className="portfolio__item-image">
-              <img src={IMG2} alt="image2" />
-            </div>
-            <h3>This is a portfolio item title</h3>
-            <div className="portfolio__item-cta">
-              <a
-                href="https:github.com"
-                className="resize-content btn"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Github
-              </a>
-              <a
-                href="https:.com"
-                className="resize-content btn btn-primary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Live Demo
-              </a>
-            </div>
-          </article>
-          <article data-aos="zoom-in" className="portfolio__item">
-            <div className="portfolio__item-image">
-              <img src={IMG3} alt="image3" />
-            </div>
-            <h3>This is a portfolio item title</h3>
-            <div className="portfolio__item-cta">
-              <a
-                href="https:github.com"
-                className="resize-content btn"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Github
-              </a>
-              <a
-                href="https:.com"
-                className="resize-content btn btn-primary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Live Demo
-              </a>
-            </div>
-          </article>
-          </div>
-          <div className="more">
-            <button className="btn btn-primary">
-              Show More{" "}
-              <BsFillCaretDownFill style={{ verticalAlign: "text-top" }} />
-            </button>
-          </div>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            Item Two
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            Item Three
-          </TabPanel>
+            {item && Object.entries(item).map((element, index)=> (
+              <TabPanel value={value} index={index} key={index}>
+                <div className="portfolio__container">
+                  {element[1]}
+                </div>
+                {
+                  (element[1] && element[1].length === 6) ?
+                  <div className="more">
+                    <button className="btn btn-primary" onClick={(() => addItem(element[0]))}>
+                      Show More{" "}
+                      <BsFillCaretDownFill style={{ verticalAlign: "text-top" }} />
+                    </button>
+                  </div> : ""
+                }
+              </TabPanel>
+            ))}
         </Box>
       </div>
     </section>
-    // <section id="portfolio" className="section">
-    //   <h5 data-aos="fade">My Recent Work</h5>
-    //   <h2 data-aos="fade">Portfolio</h2>
-    //   <div className="container portfolio__container">
-    //     <article data-aos="zoom-in" className="portfolio__item">
-    //       <div className="portfolio__item-image">
-    //         <img src={IMG1} alt="image1" />
-    //       </div>
-    //       <h3>This is a portfolio item title</h3>
-    //       <div className="portfolio__item-cta">
-    //         <a
-    //           href="https://github.com"
-    //           className="btn"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Github
-    //         </a>
-    //         <a
-    //           href="https://.com"
-    //           className="btn btn-primary"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Live Demo
-    //         </a>
-    //       </div>
-    //     </article>
-    //     <article data-aos="zoom-in" className="portfolio__item">
-    //       <div className="portfolio__item-image">
-    //         <img src={IMG2} alt="image2" />
-    //       </div>
-    //       <h3>This is a portfolio item title</h3>
-    //       <div className="portfolio__item-cta">
-    //         <a
-    //           href="https://github.com"
-    //           className="btn"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Github
-    //         </a>
-    //         <a
-    //           href="https://.com"
-    //           className="btn btn-primary"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Live Demo
-    //         </a>
-    //       </div>
-    //     </article>
-    //     <article data-aos="zoom-in" className="portfolio__item">
-    //       <div className="portfolio__item-image">
-    //         <img src={IMG3} alt="image3" />
-    //       </div>
-    //       <h3>This is a portfolio item title</h3>
-    //       <div className="portfolio__item-cta">
-    //         <a
-    //           href="https://github.com"
-    //           className="btn"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Github
-    //         </a>
-    //         <a
-    //           href="https://.com"
-    //           className="btn btn-primary"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Live Demo
-    //         </a>
-    //       </div>
-    //     </article>
-    //     <article data-aos="zoom-in" className="portfolio__item">
-    //       <div className="portfolio__item-image">
-    //         <img src={IMG4} alt="image4" />
-    //       </div>
-    //       <h3>This is a portfolio item title</h3>
-    //       <div className="portfolio__item-cta">
-    //         <a
-    //           href="https://github.com"
-    //           className="btn"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Github
-    //         </a>
-    //         <a
-    //           href="https://.com"
-    //           className="btn btn-primary"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Live Demo
-    //         </a>
-    //       </div>
-    //     </article>
-    //     <article data-aos="zoom-in" className="portfolio__item">
-    //       <div className="portfolio__item-image">
-    //         <img src={IMG5} alt="image5" />
-    //       </div>
-    //       <h3>This is a portfolio item title</h3>
-    //       <div className="portfolio__item-cta">
-    //         <a
-    //           href="https://github.com"
-    //           className="btn"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Github
-    //         </a>
-    //         <a
-    //           href="https://.com"
-    //           className="btn btn-primary"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Live Demo
-    //         </a>
-    //       </div>
-    //     </article>
-    //     <article data-aos="zoom-in" className="portfolio__item">
-    //       <div className="portfolio__item-image">
-    //         <img src={IMG6} alt="image6" />
-    //       </div>
-    //       <h3>This is a portfolio item title</h3>
-    //       <div className="portfolio__item-cta">
-    //         <a
-    //           href="https://github.com"
-    //           className="btn"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Github
-    //         </a>
-    //         <a
-    //           href="https://.com"
-    //           className="btn btn-primary"
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //         >
-    //           Live Demo
-    //         </a>
-    //       </div>
-    //     </article>
-    //   </div>
-    //   <div className="more">
-    //     <button className="btn btn-primary">
-    //       Show More{" "}
-    //       <BsFillCaretDownFill style={{ verticalAlign: "text-top" }} />
-    //     </button>
-    //   </div>
-    // </section>
   );
 };
 

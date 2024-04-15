@@ -5,7 +5,9 @@ import { FaAward } from "react-icons/fa";
 import { BiBuildingHouse } from "react-icons/bi";
 import { VscFolderLibrary } from "react-icons/vsc";
 
-const About = () => {
+const About = ({about, project}) => {
+  let totalProject = project && Object.values(project).flat().length;
+
   return (
     <section id="about" className="section">
       <h5 data-aos="fade">Get to Know</h5>
@@ -21,17 +23,17 @@ const About = () => {
             <article className="about__card" data-aos="fade-down">
               <FaAward className="about__icon" />
               <h5>Experience</h5>
-              <small>1+ Years Working</small>
+              <small>{about?.year}+ Years Working as Software Developer</small>
             </article>
             <article className="about__card" data-aos="fade-up">
               <VscFolderLibrary className="about__icon" />
               <h5>Projects</h5>
-              <small>10+ Completed</small>
+              <small>Completed {totalProject}+ <br/> (Games, Website, Mobile, etc)</small>
             </article>
             <article className="about__card" data-aos="fade-down">
               <BiBuildingHouse className="about__icon" />
               <h5>Education</h5>
-              <small>SMK ANTARTIKA 2 SIDOARJO</small>
+              <small>High School - {about?.education}</small>
             </article>
           </div>
           <p data-aos="fade">

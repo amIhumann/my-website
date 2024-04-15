@@ -1,114 +1,58 @@
-import React from "react";
-import "./experience.css";
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Autoplay } from 'swiper';
 import { BsPatchCheckFill } from "react-icons/bs";
 import { AiFillHtml5 } from "react-icons/ai";
 import * as Di from "react-icons/di";
+import "./experience.css";
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
-const Experience = () => {
-  // console.log(DiCss3);
+const Experience = ({experiences}) => {
+  const data = Object.entries(experiences || {});
   const Tes = Di['DiCss3'];  
   return (
     <section id="experience" className="section">
       <h5 data-aos="fade">What Skills I Have</h5>
       <h2 data-aos="fade">My Experience</h2>
-      <div className="container experience__container">
-        <div data-aos="fade-right" className="experience__frontend">
-          <h3>Frontend Development</h3>
-          <div className="experience__content">
-            <article className="experience__details">
-              <AiFillHtml5 className="experience__details-icon" />
-              <div>
-                <h4>HTML</h4>
-                <small>Experienced</small>
+      <div data-aos="fade" className="container experience__container">
+          <Swiper
+            pagination={{
+              type: 'progressbar',
+            }}
+            spaceBetween={30}
+            navigation={false}
+            modules={[Pagination, Autoplay]}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: false,
+            }}
+            className="mySwiper"
+          >
+            {data.map((element)=> (
+              <SwiperSlide key={element[0]}>
+              <div className="experience__frontend">
+                <h3>{element[0]}</h3>
+                <div className="experience__content">
+                  {element[1].map((value, key)=>(
+                    <article className="experience__details" key={`${element[0]}-${key}`}>
+                      <BsPatchCheckFill className="experience__details-icon" />
+                      <div>
+                        <h4>{value.language}</h4>
+                        <small>{value.level}</small>
+                      </div>
+                    </article>
+                  ))}
+                </div>
               </div>
-            </article>
-            <article className="experience__details">
-              <Tes className="experience__details-icon" />
-              <div>
-                <h4>CSS</h4>
-                <small>Experienced</small>
-              </div>
-            </article>
-            <article className="experience__details">
-              <Di.DiJavascript1 className="experience__details-icon" />
-              <div>
-                <h4>JavaScript</h4>
-                <small>Experienced</small>
-              </div>
-            </article>
-            <article className="experience__details">
-              <BsPatchCheckFill className="experience__details-icon" />
-              <div>
-                <h4>Bootstrap</h4>
-                <small>Experienced</small>
-              </div>
-            </article>
-            <article className="experience__details">
-              <BsPatchCheckFill className="experience__details-icon" />
-              <div>
-                <h4>Three JS</h4>
-                <small>Intermediate</small>
-              </div>
-            </article>
-            <article className="experience__details">
-              <BsPatchCheckFill className="experience__details-icon" />
-              <div>
-                <h4>React JS</h4>
-                <small>Experienced</small>
-              </div>
-            </article>
-          </div>
-        </div>
-        <div data-aos="fade-left" className="experience__backend">
-          <h3>Backend Development</h3>
-          <div className="experience__content">
-            <article className="experience__details">
-              <BsPatchCheckFill className="experience__details-icon" />
-              <div>
-                <h4>PHP</h4>
-                <small>Experienced</small>
-              </div>
-            </article>
-            <article className="experience__details">
-              <BsPatchCheckFill className="experience__details-icon" />
-              <div>
-                <h4>Node JS</h4>
-                <small>Experienced</small>
-              </div>
-            </article>
-            <article className="experience__details">
-              <BsPatchCheckFill className="experience__details-icon" />
-              <div>
-                <h4>Java</h4>
-                <small>Intermediate</small>
-              </div>
-            </article>
-            <article className="experience__details">
-              <BsPatchCheckFill className="experience__details-icon" />
-              <div>
-                <h4>Python</h4>
-                <small>Intermediate</small>
-              </div>
-            </article>
-            <article className="experience__details">
-              <BsPatchCheckFill className="experience__details-icon" />
-              <div>
-                <h4>MySql</h4>
-                <small>Experienced</small>
-              </div>
-            </article>
-            <article className="experience__details">
-              <BsPatchCheckFill className="experience__details-icon" />
-              <div>
-                <h4>PostgreSql</h4>
-                <small>Experienced</small>
-              </div>
-            </article>
-          </div>
-        </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
       </div>
     </section>
   );
-};
+}
+
 
 export default Experience;

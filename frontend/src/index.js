@@ -1,27 +1,33 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import ReactDOM from 'react-dom/client';
-import axios from 'axios';
 import App from './App';
 import Admin from './Admin';
 import Login from './components/admin/login'
-import Add from './components/admin/add'
-import Navbar from './components/admin/navbar'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import axios from 'axios';
+
 window.Buffer = window.Buffer || require("buffer").Buffer;
 const root = ReactDOM.createRoot(document.getElementById('root'));
+export const GlobalState = createContext(null);
+const url = "http://localhost:5000/";
+const axiosRequest = axios.create({
+  baseURL: url,
+  timeout: 30000
+});
+
 root.render(
   <>
-    <Router>
-      <Routes>
-        <Route exact path="/" element={<App />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin" element={<><Navbar /><Admin /></>} />
-        <Route path="/:type/:table">
-          <Route index element={<><Navbar /><Add /></>} />
-          <Route path=":id" element={<><Navbar /><Add /></>} />
-        </Route>
-      </Routes>
-    </Router>
+    <GlobalState.Provider value={{url, axiosRequest}}>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<App />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin/*" element={<Admin />} />
+        </Routes>
+      </Router>
+    </GlobalState.Provider>
   </>
 );
+
+document.querySelector(".loading__page").remove();
 

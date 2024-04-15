@@ -1,4 +1,5 @@
 import { Portfolio } from '../models/backendModel.js'
+import path from "path";
 
 const getColumn = async (req, res) => {
     try {
@@ -44,26 +45,60 @@ const getById = async (req, res) => {
 }
 const create = async (req, res) => {
     try {
-        await Portfolio.create(req.body)
-        res.json({
-            'message': "Portfolio Created"
-        })
+        let input = req.body;
+
+        if (req.files !== null) {
+            let file = req.files.file;
+            const ext = path.extname(file.name);
+            const fileSize = file.data.length;
+            const fileName = file.md5 + ext;
+            // const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+            const allowedType = ['.jpg', '.jpeg', '.png'];
+            if (!allowedType.includes(ext.toLowerCase())) return res.status(422).json({ message: "Invalid Images" });
+            if (fileSize > 5000000) return res.status(422).json({ message: "Image must be less than 5 MB" });
+
+            await file.mv(`./public/images/${fileName}`, (err) => {
+                if (err) return res.status(500).json({ message: err.message });
+            })
+
+            input = { ...input, img: fileName };
+        }
+        
+        await Portfolio.create(input);
+        res.status(200).json({ message: "Portfolio Created Successfuly" });
     } catch (error) {
-        res.json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
 }
 const update = async (req, res) => {
     try {
-        await Portfolio.update(req.body, {
+        let input = req.body;
+
+        if (req.files !== null) {
+            let file = req.files.file;
+            const ext = path.extname(file.name);
+            const fileSize = file.data.length;
+            const fileName = file.md5 + ext;
+            // const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+            const allowedType = ['.jpg', '.jpeg', '.png'];
+            if (!allowedType.includes(ext.toLowerCase())) return res.status(422).json({ message: "Invalid Images" });
+            if (fileSize > 5000000) return res.status(422).json({ message: "Image must be less than 5 MB" });
+
+            await file.mv(`./public/images/${fileName}`, (err) => {
+                if (err) return res.status(500).json({ message: err.message });
+            })
+
+            input = { ...input, img: fileName };
+        }
+
+        await Portfolio.update(input, {
             where: {
                 id: req.params.id
             }
-        })
-        res.json({
-            'message': "Portfolio Updated"
-        })
+        });
+        res.status(200).json({ message: "Portfolio Updated Successfuly" });
     } catch (error) {
-        res.json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
 }
 const deleted = async (req, res) => {

@@ -6,7 +6,7 @@ import { BsWhatsapp } from "react-icons/bs";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
 
-const Contact = () => {
+const Contact = ({sosmed}) => {
   const form = useRef();
 
   const sendEmail = async (e) => {
@@ -41,9 +41,9 @@ const Contact = () => {
           <article className="contact__option">
             <MdOutlineEmail className="contact__option-icon" />
             <h4>Email</h4>
-            <h5>hanifanhidayatullah@gmail.com</h5>
+            <h5>{sosmed?.email && sosmed?.email.split(':')[1]}</h5>
             <a
-              href="mailto:hanifanhidayatullah@gmail.com"
+              href={sosmed?.email}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -55,7 +55,7 @@ const Contact = () => {
             <h4>Mesengger</h4>
             <h5>Hanifan Hidayatulahh</h5>
             <a
-              href="https://m.me/dayat.senju"
+              href={sosmed?.messenger}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -65,9 +65,9 @@ const Contact = () => {
           <article className="contact__option">
             <BsWhatsapp className="contact__option-icon" />
             <h4>WhatsApp</h4>
-            <h5>+62-8125-2281-157</h5>
+            <h5>{sosmed?.phone && sosmed?.phone?.split('/')[3]?.replace(/(\d{4})(\d{4})(\d{4})/, '$1-$2-$3')}</h5>
             <a
-              href="https://wa.me/6281252281157"
+              href={sosmed?.phone}
               target="_blank"
               rel="noopener noreferrer"
             >

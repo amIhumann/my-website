@@ -1,15 +1,17 @@
-import { Experienced } from '../models/backendModel.js'
+import { Services } from '../models/backendModel.js'
+import {Buffer} from 'buffer'
 
 const getColumn = async (req, res) => {
     try {
         const result = []
-        const data = Experienced.rawAttributes
+        const data = Services.rawAttributes
         const width = 800 / Object.keys(data).length
-        for (let key in Experienced.rawAttributes) {
+        for (let key in data) {
             if (key.includes('At')) break;
+            let headerName = key[0].toUpperCase() + key.substring(1);
             result.push({
                 field: key,
-                headerName: key[0].toUpperCase() + key.substring(1),
+                headerName: headerName.replace(/_/g, " "),
                 width: width,
                 type: {
                     name: data[key].type.key,
@@ -24,7 +26,7 @@ const getColumn = async (req, res) => {
 }
 const getAll = async (req, res) => {
     try {
-        const item = await Experienced.findAll()
+        const item = await Services.findAll()
         res.json(item)
     } catch (error) {
         res.json({ message: error.message })
@@ -32,10 +34,10 @@ const getAll = async (req, res) => {
 }
 const getById = async (req, res) => {
     try {
-        const item = await Experienced.findAll({
+        const item = await Services.findAll({
             where: {
                 id: req.params.id
-            }, attributes: ['id', 'year']
+            }
         })
         res.json(item)
     } catch (error) {
@@ -44,33 +46,33 @@ const getById = async (req, res) => {
 }
 const create = async (req, res) => {
     try {
-        await Experienced.create(req.body)
+        await Services.create(req.body)
         res.json({
-            'message': "Experiences Created"
+            'message': "Services Created"
+        })
+    } catch (error) {
+        res.json({ message: error.message })
+    }
+}
+const update = async (req, res) => {
+    try {
+        await Services.update(req.body, {
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({
+            'message': "Services Updated"
         })
     } catch (error) {
         res.json({ message: error.message })
     }
 }
 
-const update = async (req, res) => {
-    try {
-        await Experienced.update(req.body, {
-            where: {
-                id: req.params.id
-            }
-        })
-        res.json({
-            'message': "Experienced Updated"
-        })
-    } catch (error) {
-        res.json({ message: error.message })
-    }
-}
 const deleted = async (req, res) => {
-    let id = Buffer.from(req.params.id, 'base64').toString('ascii');
     try {
-        await Experienced.destroy({
+        let id = Buffer.from(req.params.id, 'base64').toString('ascii').split(',');
+        await Services.destroy({
             where: {
                 id: id
             }
@@ -82,4 +84,5 @@ const deleted = async (req, res) => {
         res.json({ message: error.message })
     }
 }
+
 export { getAll, create, getById, update, deleted, getColumn }

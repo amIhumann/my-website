@@ -26,7 +26,7 @@ const getColumn = async (req, res) => {
 }
 const getAll = async (req, res) => {
     try {
-        const item = await Gallery.findAll({ attributes: ['id', 'title', 'description'] })
+        const item = await Gallery.findAll()
         res.json(item)
     } catch (error) {
         res.json({ message: error.message })
@@ -37,8 +37,7 @@ const getById = async (req, res) => {
         const item = await Gallery.findAll({
             where: {
                 id: req.params.id
-            }, attributes: ['id', 'title', 'description', 'img', 'createdAt', 'updatedAt']
-        })
+            }})
         res.json(item)
     } catch (error) {
         res.json({ message: error.message })
