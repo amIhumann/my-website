@@ -1,5 +1,6 @@
 import { Portfolio } from '../models/backendModel.js'
 import path from "path";
+import {Buffer} from 'buffer'
 
 const getColumn = async (req, res) => {
     try {

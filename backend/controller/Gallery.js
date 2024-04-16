@@ -1,6 +1,7 @@
 import { Gallery } from '../models/backendModel.js'
 import path from "path";
 import fs from "fs";
+import {Buffer} from 'buffer'
 
 const getColumn = async (req, res) => {
     try {
